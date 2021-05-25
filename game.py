@@ -1,25 +1,22 @@
 import pygame
+from pygame.sndarray import array
 from player_card import Player_Card
 from color import Color
 
 class Game:
 
-    def __init__(self):
-        pygame.init()
-        self.current_loc = "c:/Users/Kévin/Desktop/python test/morpion/client"
-        pygame.display.set_caption("MorpionKev")
-        pygame.display.set_icon(pygame.image.load(f"{self.current_loc}/images/morpion.png"))
+    def __init__(self, screen, width, height, name, current_loc):
         self.SIZE_CASE = 210
-        self.WIDTH = 630
-        self.HEIGHT = 830
+        self.WIDTH = width
+        self.HEIGHT = height
         self.CARD_HEIGHT = 100
-        self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
+        self.screen = screen
         self.COLOR_RECT_GAME = Color.LIGHT_GRAY.value
         self.rect_game = pygame.Rect(0, self.CARD_HEIGHT, self.WIDTH, self.HEIGHT - self.CARD_HEIGHT * 2)
         pos_card_one = (0,0, self.WIDTH, self.CARD_HEIGHT)
         pos_card_two = (0, self.HEIGHT - self.CARD_HEIGHT, self.WIDTH, self.CARD_HEIGHT)
-        self.player_one = Player_Card("Kevin", f"{self.current_loc}/images/profil.png", pos_card_one, Color.PURPLE_KEVIN, self.__draw_circle)
-        self.player_two = Player_Card("Maman", f"{self.current_loc}/images/profil.png", pos_card_two, Color.GREEN_MAMAN, self.__draw_cross)
+        self.player_one = Player_Card(name, f"{current_loc}/images/profil.png", pos_card_one, Color.DARK_PURPLE, self.__draw_circle)
+        self.player_two = Player_Card("Karim", f"{current_loc}/images/profil.png", pos_card_two, Color.BLUE, self.__draw_cross)
         self.turn = True # True == Player One
         self.grid = [[0,0,0], [0,0,0], [0,0,0]] # 0 = neutre , 1 = player one , 2 = player two
         self.number_turn = 0
@@ -28,9 +25,11 @@ class Game:
     def __draw_cross(self, color, pos):
         pygame.draw.line(self.screen, color, (pos[0] * self.SIZE_CASE + 20, pos[1] * self.SIZE_CASE + self.CARD_HEIGHT + 20), (pos[0] * self.SIZE_CASE + self.SIZE_CASE - 20, pos[1] * self.SIZE_CASE + self.CARD_HEIGHT + 20 + self.SIZE_CASE - 40), width=10)
         pygame.draw.line(self.screen, color, (pos[0] * self.SIZE_CASE + 20, pos[1] * self.SIZE_CASE + self.CARD_HEIGHT + self.SIZE_CASE - 20), (pos[0] * self.SIZE_CASE + self.SIZE_CASE - 20, pos[1] * self.SIZE_CASE + self.CARD_HEIGHT + 20), width=10)
+        pygame.display.update()
 
     def __draw_circle(self, color, pos):
         pygame.draw.circle(self.screen, color, (pos[0] * self.SIZE_CASE + 105, pos[1] * self.SIZE_CASE + 205), 90, width=5)
+        pygame.display.update()
 
     def check_win(self):  
         result = self.__check_win()
@@ -48,11 +47,13 @@ class Game:
     def draw_winner(self, winner: Player_Card):
         victory = self.font_winner.render(f"VICTOIRE !", True, Color.GREEN.value)
         name = winner.font_name.render(winner.name, True, winner.color_name)
+        pygame.draw.rect(self.screen, Color.WHITE.value, pygame.Rect(self.WIDTH / 2 - 75, self.HEIGHT/2 - 70, 190, 75))
         self.screen.blit(winner.image, (self.WIDTH / 2 - 64, self.HEIGHT / 2 - 64))
-        self.screen.blit(victory, (self.WIDTH / 2 - 64 + 70, self.HEIGHT / 2 - 60))
+        self.screen.blit(victory, (self.WIDTH / 2 - 64 + 70, self.HEIGHT / 2 - 65))
         self.screen.blit(name, (self.WIDTH / 2 - 64 + 70, self.HEIGHT / 2 - 20))
+        pygame.display.update()
 
-    def draw_form(self, pos_mouse):
+    def draw_form(self, pos_mouse: array):
         if pos_mouse[1] <= self.CARD_HEIGHT or pos_mouse[1] >= self.HEIGHT - self.CARD_HEIGHT: return False
         pos_x = int((pos_mouse[0]) / self.SIZE_CASE)
         pos_y = int((pos_mouse[1] - self.CARD_HEIGHT) / self.SIZE_CASE)
@@ -67,7 +68,7 @@ class Game:
             self.player_two.draw_form((pos_x, pos_y))
         self.turn = not self.turn
         self.number_turn += 1
-        
+        pygame.display.update()
         return True
         
 
@@ -78,6 +79,7 @@ class Game:
         self.player_one.draw_card(self.screen)
         self.player_two.draw_card(self.screen)
         self.number_turn = 0
+        pygame.display.update()
 
     def __check_win(self):
         grid = self.grid
@@ -133,6 +135,7 @@ class Game:
         self.player_two.draw_card(self.screen)
         pygame.draw.rect(self.screen, self.COLOR_RECT_GAME, self.rect_game)
         self.__draw_grid()
+        pygame.display.update()
     
     def __draw_grid(self):
         pygame.draw.line(self.screen, Color.BLACK.value, (0, self.SIZE_CASE + self.CARD_HEIGHT), (self.WIDTH, self.SIZE_CASE + self.CARD_HEIGHT), width=1)
