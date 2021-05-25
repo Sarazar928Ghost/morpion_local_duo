@@ -23,7 +23,7 @@ class Game:
         self.turn = True # True == Player One
         self.grid = [[0,0,0], [0,0,0], [0,0,0]] # 0 = neutre , 1 = player one , 2 = player two
         self.number_turn = 0
-        self.font_winner = pygame.font.SysFont(None, 50)
+        self.font_winner = pygame.font.SysFont(None, 25)
 
     def __draw_cross(self, color, pos):
         pygame.draw.line(self.screen, color, (pos[0] * self.SIZE_CASE + 20, pos[1] * self.SIZE_CASE + self.CARD_HEIGHT + 20), (pos[0] * self.SIZE_CASE + self.SIZE_CASE - 20, pos[1] * self.SIZE_CASE + self.CARD_HEIGHT + 20 + self.SIZE_CASE - 40), width=10)
@@ -46,8 +46,11 @@ class Game:
         return None
         
     def draw_winner(self, winner: Player_Card):
-        message = self.font_winner.render(f"Félicitation, {winner.name} a gagné !", True, Color.GREEN.value)
-        self.screen.blit(message, (75, self.HEIGHT / 2))
+        victory = self.font_winner.render(f"VICTOIRE !", True, Color.GREEN.value)
+        name = winner.font_name.render(winner.name, True, winner.color_name)
+        self.screen.blit(winner.image, (self.WIDTH / 2 - 64, self.HEIGHT / 2 - 64))
+        self.screen.blit(victory, (self.WIDTH / 2 - 64 + 70, self.HEIGHT / 2 - 60))
+        self.screen.blit(name, (self.WIDTH / 2 - 64 + 70, self.HEIGHT / 2 - 20))
 
     def draw_form(self, pos_mouse):
         if pos_mouse[1] <= self.CARD_HEIGHT or pos_mouse[1] >= self.HEIGHT - self.CARD_HEIGHT: return False
