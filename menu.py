@@ -62,7 +62,7 @@ class Menu:
                         if event.key == pygame.K_BACKSPACE:
                             name = name[:-1]
                         else:
-                            if len(name) != 16 and event.key != pygame.K_TAB:
+                            if len(name) != 16 and event.key != pygame.K_TAB and event.key != pygame.K_RETURN and event.key != 1073741912:
                                 name += event.unicode
                         color_rect = self.color_rect_active
                     else:

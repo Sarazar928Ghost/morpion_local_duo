@@ -21,6 +21,7 @@ class Game:
         self.grid = [[0,0,0], [0,0,0], [0,0,0]] # 0 = neutre , 1 = player one , 2 = player two
         self.number_turn = 0
         self.font_winner = pygame.font.SysFont(None, 25)
+        pygame.mouse.set_cursor(*pygame.cursors.arrow)
 
     def __draw_cross(self, color, pos):
         pygame.draw.line(self.screen, color, (pos[0] * self.SIZE_CASE + 20, pos[1] * self.SIZE_CASE + self.CARD_HEIGHT + 20), (pos[0] * self.SIZE_CASE + self.SIZE_CASE - 20, pos[1] * self.SIZE_CASE + self.CARD_HEIGHT + 20 + self.SIZE_CASE - 40), width=10)
@@ -47,7 +48,12 @@ class Game:
     def draw_winner(self, winner: Player_Card):
         victory = self.font_winner.render(f"VICTOIRE !", True, Color.GREEN.value)
         name = winner.font_name.render(winner.name, True, winner.color_name)
-        pygame.draw.rect(self.screen, Color.WHITE.value, pygame.Rect(self.WIDTH / 2 - 75, self.HEIGHT/2 - 70, 190, 75))
+        # + 100 width is for text of victory
+        length_add = name.get_width() - 100
+        if length_add < 0:
+            length_add = 0
+        length_add += 10 # 10 is for the padding right
+        pygame.draw.rect(self.screen, Color.WHITE.value, pygame.Rect(self.WIDTH / 2 - 75, self.HEIGHT/2 - 70, 80 + 100 + length_add, 75))
         self.screen.blit(winner.image, (self.WIDTH / 2 - 64, self.HEIGHT / 2 - 64))
         self.screen.blit(victory, (self.WIDTH / 2 - 64 + 70, self.HEIGHT / 2 - 65))
         self.screen.blit(name, (self.WIDTH / 2 - 64 + 70, self.HEIGHT / 2 - 20))
