@@ -18,6 +18,7 @@ class Menu:
     def draw_menu(self):
         self.screen.blit(self.image, (0,0))
         self.__draw_rect(self.color_rect_inactive)
+        self.__draw_button_play(Color.PURPLE.value, self.font_button.render("PLAY", True, Color.DARK_PURPLE.value))
 
     def __draw_rect(self, color):
         pygame.draw.rect(self.screen, color, self.input_rect)
@@ -62,7 +63,11 @@ class Menu:
                         if event.key == pygame.K_BACKSPACE:
                             name = name[:-1]
                         else:
-                            if len(name) != 16 and event.key != pygame.K_TAB and event.key != pygame.K_RETURN and event.key != 1073741912:
+                            print(event.key)
+                            if event.key == pygame.K_RETURN or event.key == 1073741912:
+                                if len(name.strip().replace(" ", "")) > 2:
+                                    done = True
+                            elif len(name) != 16 and event.key != pygame.K_TAB and event.unicode.encode('utf-8') != b'\x16':
                                 name += event.unicode
                         color_rect = self.color_rect_active
                     else:
@@ -74,7 +79,6 @@ class Menu:
 
                 self.__draw_rect(color_rect)
                 self.__draw_name(name, color_name)
-                self.__draw_button_play(Color.PURPLE.value, self.font_button.render("PLAY", True, Color.DARK_PURPLE.value))
                     
             clock.tick(30)
         return (True, name)

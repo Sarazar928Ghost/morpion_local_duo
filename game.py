@@ -90,49 +90,23 @@ class Game:
     def __check_win(self):
         grid = self.grid
 
-        # Player One Line
-        if grid[0][0] == 1 and grid[1][0] == 1 and grid[2][0] == 1:
-            return 1
-        if grid[0][1] == 1 and grid[1][1] == 1 and grid[2][1] == 1:
-            return 1
-        if grid[0][2] == 1 and grid[1][2] == 1 and grid[2][2] == 1:
-            return 1
-
-        # Player Two Line
-        if grid[0][0] == 2 and grid[1][0] == 2 and grid[2][0] == 2:
-            return 2
-        if grid[0][1] == 2 and grid[1][1] == 2 and grid[2][1] == 2:
-            return 2
-        if grid[0][2] == 2 and grid[1][2] == 2 and grid[2][2] == 2:
-            return 2
-
-        # Player One Colonum
-        if grid[0][0] == 1 and grid[0][1] == 1 and grid[0][2] == 1:
-            return 1
-        if grid[1][0] == 1 and grid[1][1] == 1 and grid[1][2] == 1:
-            return 1
-        if grid[2][0] == 1 and grid[2][1] == 1 and grid[2][2] == 1:
-            return 1
-
-        # Player Two Colonum
-        if grid[0][0] == 2 and grid[0][1] == 2 and grid[0][2] == 2:
-            return 2
-        if grid[1][0] == 2 and grid[1][1] == 2 and grid[1][2] == 2:
-            return 2
-        if grid[2][0] == 2 and grid[2][1] == 2 and grid[2][2] == 2:
-            return 2
-
-        # Player One Diagonal
-        if grid[0][0] == 1 and grid[1][1] == 1 and grid[2][2] == 1:
-            return 1
-        if grid[0][2] == 1 and grid[1][1] == 1 and grid[2][0] == 1:
-            return 1
-
-        # Player Two Diagonal
-        if grid[0][0] == 2 and grid[1][1] == 2 and grid[2][2] == 2:
-            return 2
-        if grid[0][2] == 2 and grid[1][1] == 2 and grid[2][0] == 2:
-            return 2
+        for i in range(1,3):
+            if grid[0][0] == i and grid[1][0] == i and grid[2][0] == i:
+                return i
+            if grid[0][1] == i and grid[1][1] == i and grid[2][1] == i:
+                return i
+            if grid[0][2] == i and grid[1][2] == i and grid[2][2] == i:
+                return i
+            if grid[0][0] == i and grid[0][1] == i and grid[0][2] == i:
+                return i
+            if grid[1][0] == i and grid[1][1] == i and grid[1][2] == i:
+                return i
+            if grid[2][0] == i and grid[2][1] == i and grid[2][2] == i:
+                return i
+            if grid[0][0] == i and grid[1][1] == i and grid[2][2] == i:
+                return i
+            if grid[0][2] == i and grid[1][1] == i and grid[2][0] == i:
+                return i
 
         return 0
 
