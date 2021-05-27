@@ -15,21 +15,30 @@ class Game:
         self.rect_game = pygame.Rect(0, self.CARD_HEIGHT, self.WIDTH, self.HEIGHT - self.CARD_HEIGHT * 2)
         pos_card_one = (0,0, self.WIDTH, self.CARD_HEIGHT)
         pos_card_two = (0, self.HEIGHT - self.CARD_HEIGHT, self.WIDTH, self.CARD_HEIGHT)
-        self.player_one = Player_Card(name, f"{current_loc}/images/profil.png", pos_card_one, Color.DARK_PURPLE, self.__draw_circle)
+        self.player_one = Player_Card(name, f"{current_loc}/images/profil.png", pos_card_one, Color.RED, self.__draw_circle)
         self.player_two = Player_Card("Karim", f"{current_loc}/images/profil.png", pos_card_two, Color.BLUE, self.__draw_cross)
-        self.turn = True # True == Player One
+        self.player_one.my_turn = True
         self.grid = [[0,0,0], [0,0,0], [0,0,0]] # 0 = neutre , 1 = player one , 2 = player two
         self.number_turn = 0
         self.font_winner = pygame.font.SysFont(None, 25)
         pygame.mouse.set_cursor(*pygame.cursors.arrow)
 
-    def __draw_cross(self, color, pos):
-        pygame.draw.line(self.screen, color, (pos[0] * self.SIZE_CASE + 20, pos[1] * self.SIZE_CASE + self.CARD_HEIGHT + 20), (pos[0] * self.SIZE_CASE + self.SIZE_CASE - 20, pos[1] * self.SIZE_CASE + self.CARD_HEIGHT + 20 + self.SIZE_CASE - 40), width=10)
-        pygame.draw.line(self.screen, color, (pos[0] * self.SIZE_CASE + 20, pos[1] * self.SIZE_CASE + self.CARD_HEIGHT + self.SIZE_CASE - 20), (pos[0] * self.SIZE_CASE + self.SIZE_CASE - 20, pos[1] * self.SIZE_CASE + self.CARD_HEIGHT + 20), width=10)
+    def __draw_cross(self, color, pos, grid = True):
+        if grid:
+            pygame.draw.line(self.screen, color, (pos[0] * self.SIZE_CASE + 20, pos[1] * self.SIZE_CASE + self.CARD_HEIGHT + 20), (pos[0] * self.SIZE_CASE + self.SIZE_CASE - 20, pos[1] * self.SIZE_CASE + self.CARD_HEIGHT + 20 + self.SIZE_CASE - 40), width=10)
+            pygame.draw.line(self.screen, color, (pos[0] * self.SIZE_CASE + 20, pos[1] * self.SIZE_CASE + self.CARD_HEIGHT + self.SIZE_CASE - 20), (pos[0] * self.SIZE_CASE + self.SIZE_CASE - 20, pos[1] * self.SIZE_CASE + self.CARD_HEIGHT + 20), width=10)
+        # Draw form to the card player
+        else:
+            pygame.draw.line(self.screen, color, (pos[0] - 40, pos[1] + 20), (pos[0] + 20, pos[1] + 80), width=6)
+            pygame.draw.line(self.screen, color, (pos[0] + 20, pos[1] + 20), (pos[0] - 40, pos[1] + 80), width=6)
         pygame.display.update()
 
-    def __draw_circle(self, color, pos):
-        pygame.draw.circle(self.screen, color, (pos[0] * self.SIZE_CASE + 105, pos[1] * self.SIZE_CASE + 205), 90, width=5)
+    def __draw_circle(self, color, pos, grid = True):
+        if grid:
+            pygame.draw.circle(self.screen, color, (pos[0] * self.SIZE_CASE + 105, pos[1] * self.SIZE_CASE + 205), 90, width=5)
+        # Draw form to the card player
+        else:
+            pygame.draw.circle(self.screen, color, (pos[0], pos[1] + 50), 30, width=3)
         pygame.display.update()
 
     def check_win(self):  
@@ -65,14 +74,19 @@ class Game:
         pos_y = int((pos_mouse[1] - self.CARD_HEIGHT) / self.SIZE_CASE)
         if self.grid[pos_x][pos_y] != 0: return False
         # Player one
-        if self.turn:
+        if self.player_one.my_turn:
             self.grid[pos_x][pos_y] = 1
             self.player_one.draw_form((pos_x, pos_y))
+            self.player_one.my_turn = False
+            self.player_two.my_turn = True
         # Player two
-        elif not self.turn:
+        elif self.player_two.my_turn:
             self.grid[pos_x][pos_y] = 2
             self.player_two.draw_form((pos_x, pos_y))
-        self.turn = not self.turn
+            self.player_two.my_turn = False
+            self.player_one.my_turn = True
+        self.player_one.draw_card(self.screen)
+        self.player_two.draw_card(self.screen)
         self.number_turn += 1
         pygame.display.update()
         return True
@@ -89,26 +103,29 @@ class Game:
 
     def __check_win(self):
         grid = self.grid
-
+        # 1 = player_one ; 2 = player_two
         for i in range(1,3):
+            # CHECK LINE
             if grid[0][0] == i and grid[1][0] == i and grid[2][0] == i:
                 return i
             if grid[0][1] == i and grid[1][1] == i and grid[2][1] == i:
                 return i
             if grid[0][2] == i and grid[1][2] == i and grid[2][2] == i:
                 return i
+            # CHECK COLUMN
             if grid[0][0] == i and grid[0][1] == i and grid[0][2] == i:
                 return i
             if grid[1][0] == i and grid[1][1] == i and grid[1][2] == i:
                 return i
             if grid[2][0] == i and grid[2][1] == i and grid[2][2] == i:
                 return i
+            # CHECK DIAGONAL
             if grid[0][0] == i and grid[1][1] == i and grid[2][2] == i:
                 return i
             if grid[0][2] == i and grid[1][1] == i and grid[2][0] == i:
                 return i
 
-        return 0
+        return 0 # no winner
 
     def draw_game(self):
         self.player_one.draw_card(self.screen)

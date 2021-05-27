@@ -53,7 +53,7 @@ class Menu:
                         active = True
                         color_rect = self.color_rect_active
                     elif self.button_rect.collidepoint(pos_mouse[0], pos_mouse[1]) :
-                        if len(name.strip().replace(" ", "")) > 3:
+                        if len(name.strip().replace(" ", "")) > 2:
                             done = True
                     else:
                         active = False
@@ -63,7 +63,6 @@ class Menu:
                         if event.key == pygame.K_BACKSPACE:
                             name = name[:-1]
                         else:
-                            print(event.key)
                             if event.key == pygame.K_RETURN or event.key == 1073741912:
                                 if len(name.strip().replace(" ", "")) > 2:
                                     done = True

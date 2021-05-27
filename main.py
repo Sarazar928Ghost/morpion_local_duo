@@ -35,7 +35,7 @@ def start_running():
                 success = game.draw_form(pos_mouse)
                 if success : 
                     winner = game.check_win()
-                    if winner != None: 
+                    if winner != None:
                         can_draw = False
                         now = int(time.time())
                     elif game.number_turn == 9:
