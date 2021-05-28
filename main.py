@@ -51,6 +51,8 @@ def start_running():
                 game.reset()
 
         clock.tick(30)
+        
+    pygame.quit()
 
 if __name__ == "__main__":
     start_running()

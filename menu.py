@@ -1,5 +1,6 @@
 import pygame
 from color import Color
+from label import Label
 
 class Menu:
 
@@ -18,23 +19,26 @@ class Menu:
     def draw_menu(self):
         self.screen.blit(self.image, (0,0))
         self.__draw_rect(self.color_rect_inactive)
-        self.__draw_button_play(Color.PURPLE.value, self.font_button.render("PLAY", True, Color.DARK_PURPLE.value))
+        label_button = Label("PLAY", self.screen, self.font_button, Color.DARK_PURPLE.value)
+        length_width = label_button.get_width()
+        length_height = label_button.get_height()
+        label_button.set_pos((self.WIDTH / 2 - length_width / 2, self.HEIGHT - 150 + length_height / 2))
+        self.__draw_button_play(Color.PURPLE.value, label_button)
 
     def __draw_rect(self, color):
         pygame.draw.rect(self.screen, color, self.input_rect)
         pygame.display.update()
 
-    def __draw_button_play(self, color, text):
+    def __draw_button_play(self, color, label_button):
         pygame.draw.rect(self.screen, color, self.button_rect, border_radius=10)
-        length_width = text.get_width()
-        length_height = text.get_height()
-        self.screen.blit(text, (self.WIDTH / 2 - length_width / 2, self.HEIGHT - 150 + length_height / 2))
+        label_button.show_label()
         pygame.display.update()
 
     def __draw_name(self, name, color):
-        message = self.font_name.render(name, True, color)
+        message = Label(name, self.screen, self.font_name, color)
         length = message.get_width()
-        self.screen.blit(message, (self.WIDTH / 2 - length / 2,75))
+        message.set_pos((self.WIDTH / 2 - length / 2,75))
+        message.show_label()
         pygame.display.update()
 
     def listen(self, clock):

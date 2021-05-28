@@ -2,6 +2,7 @@ import pygame
 from pygame.sndarray import array
 from player_card import Player_Card
 from color import Color
+from label import Label
 
 class Game:
 
@@ -55,8 +56,8 @@ class Game:
         return None
         
     def draw_winner(self, winner: Player_Card):
-        victory = self.font_winner.render(f"VICTOIRE !", True, Color.GREEN.value)
-        name = winner.font_name.render(winner.name, True, winner.color_name)
+        victory = Label("VICTOIRE !", self.screen, self.font_winner, Color.GREEN.value, (self.WIDTH / 2 - 64 + 70, self.HEIGHT / 2 - 65))
+        name = Label(winner.name, self.screen, winner.font_name, winner.color_name, (self.WIDTH / 2 - 64 + 70, self.HEIGHT / 2 - 20))
         # + 100 width is for text of victory
         length_add = name.get_width() - 100
         if length_add < 0:
@@ -64,8 +65,8 @@ class Game:
         length_add += 10 # 10 is for the padding right
         pygame.draw.rect(self.screen, Color.WHITE.value, pygame.Rect(self.WIDTH / 2 - 75, self.HEIGHT/2 - 70, 80 + 100 + length_add, 75))
         self.screen.blit(winner.image, (self.WIDTH / 2 - 64, self.HEIGHT / 2 - 64))
-        self.screen.blit(victory, (self.WIDTH / 2 - 64 + 70, self.HEIGHT / 2 - 65))
-        self.screen.blit(name, (self.WIDTH / 2 - 64 + 70, self.HEIGHT / 2 - 20))
+        victory.show_label()
+        name.show_label()
         pygame.display.update()
 
     def draw_form(self, pos_mouse: array):
@@ -135,7 +136,7 @@ class Game:
         pygame.display.update()
     
     def __draw_grid(self):
-        pygame.draw.line(self.screen, Color.BLACK.value, (0, self.SIZE_CASE + self.CARD_HEIGHT), (self.WIDTH, self.SIZE_CASE + self.CARD_HEIGHT), width=1)
-        pygame.draw.line(self.screen, Color.BLACK.value, (0, self.SIZE_CASE * 2 + self.CARD_HEIGHT), (self.WIDTH, self.SIZE_CASE * 2 + self.CARD_HEIGHT), width=1)
-        pygame.draw.line(self.screen, Color.BLACK.value, (self.SIZE_CASE, self.CARD_HEIGHT), (self.SIZE_CASE, self.HEIGHT - self.CARD_HEIGHT), width=1)
-        pygame.draw.line(self.screen, Color.BLACK.value, (self.SIZE_CASE * 2, self.CARD_HEIGHT), (self.SIZE_CASE * 2, self.HEIGHT - self.CARD_HEIGHT), width=1)
+        pygame.draw.line(self.screen, Color.BLACK.value, (0, self.SIZE_CASE + self.CARD_HEIGHT), (self.WIDTH, self.SIZE_CASE + self.CARD_HEIGHT), width=2)
+        pygame.draw.line(self.screen, Color.BLACK.value, (0, self.SIZE_CASE * 2 + self.CARD_HEIGHT), (self.WIDTH, self.SIZE_CASE * 2 + self.CARD_HEIGHT), width=2)
+        pygame.draw.line(self.screen, Color.BLACK.value, (self.SIZE_CASE, self.CARD_HEIGHT), (self.SIZE_CASE, self.HEIGHT - self.CARD_HEIGHT), width=2)
+        pygame.draw.line(self.screen, Color.BLACK.value, (self.SIZE_CASE * 2, self.CARD_HEIGHT), (self.SIZE_CASE * 2, self.HEIGHT - self.CARD_HEIGHT), width=2)
