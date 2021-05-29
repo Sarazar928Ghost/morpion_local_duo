@@ -8,12 +8,16 @@ class Label:
         self.font = font
         self.color = color
         self.antialias = antialias
-        self.label = self.__label_init()
+        self.label = self.label_init()
 
     def set_pos(self, pos):
         self.pos = pos
 
-    def __label_init(self):
+    def set_text(self, text):
+        self.text = text
+        self.label = self.label_init()
+
+    def label_init(self):
         return self.font.render(self.text, self.antialias, self.color)
 
     def show_label(self):
@@ -26,4 +30,27 @@ class Label:
         return self.label.get_height()
 
 class LabelOpacity(Label):
-    pass
+    def __init__(self, text, screen, font, color, pos = [], antialias = True):
+        super().__init__(text, screen, font, color, pos, antialias)
+        self.opacity = 250
+        self.__up_opacity = False
+        self.alpha_img = pygame.Surface(self.label.get_size(), pygame.SRCALPHA)
+        self.__update_alpha_img()
+
+    def __update_alpha_img(self):
+        self.label = self.label_init()
+        self.alpha_img.fill((255, 255, 255, self.opacity))
+        self.label.blit(self.alpha_img, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
+
+    def update_opacity(self):
+        if self.__up_opacity:
+            self.opacity += 10
+            if self.opacity == 250:
+                self.__up_opacity = False
+        elif not self.__up_opacity:
+            self.opacity -= 10
+            if self.opacity == 0:
+                self.__up_opacity = True
+        self.__update_alpha_img()
+
+

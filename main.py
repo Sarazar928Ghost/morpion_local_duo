@@ -41,6 +41,9 @@ def start_running():
                     elif game.number_turn == 9:
                         game.reset()
 
+        if can_draw:
+            game.update_opacity_message_turn()
+
         if not can_draw:
             if not winner_drawed:
                 game.draw_winner(winner)
