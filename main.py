@@ -53,6 +53,7 @@ def start_running():
                 winner_drawed = False
                 game.reset()
 
+        pygame.display.update()
         clock.tick(30)
         
     pygame.quit()

@@ -27,19 +27,19 @@ class Menu:
 
     def __draw_rect(self, color):
         pygame.draw.rect(self.screen, color, self.input_rect)
-        pygame.display.update()
+        
 
     def __draw_button_play(self, color, label_button):
         pygame.draw.rect(self.screen, color, self.button_rect, border_radius=10)
         label_button.show_label()
-        pygame.display.update()
+        
 
     def __draw_name(self, name, color):
         message = Label(name, self.screen, self.font_name, color)
         length = message.get_width()
         message.set_pos((self.WIDTH / 2 - length / 2,75))
         message.show_label()
-        pygame.display.update()
+        
 
     def listen(self, clock):
         done = False
@@ -82,7 +82,7 @@ class Menu:
 
                 self.__draw_rect(color_rect)
                 self.__draw_name(name, color_name)
-                    
+            pygame.display.update()
             clock.tick(30)
         return (True, name)
 
