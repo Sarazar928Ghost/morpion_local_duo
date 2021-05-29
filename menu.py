@@ -20,8 +20,7 @@ class Menu:
         self.screen.blit(self.image, (0,0))
         self.__draw_rect(self.color_rect_inactive)
         label_button = Label("PLAY", self.screen, self.font_button, Color.DARK_PURPLE.value)
-        length_width = label_button.get_width()
-        length_height = label_button.get_height()
+        length_width, length_height = label_button.get_size()
         label_button.set_pos((self.WIDTH / 2 - length_width / 2, self.HEIGHT - 150 + length_height / 2))
         self.__draw_button_play(Color.PURPLE.value, label_button)
 

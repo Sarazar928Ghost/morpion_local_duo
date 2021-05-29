@@ -30,7 +30,7 @@ class Game:
 
         # Init message of winner
         self.font_winner = pygame.font.SysFont(None, 25)
-        self.victory = Label("VICTOIRE !", self.screen, self.font_winner, Color.GREEN.value, (self.WIDTH / 2 - 64 + 70, self.HEIGHT / 2 - 65))
+        self.victory = Label("VICTOIRE !", self.screen, self.font_winner, Color.GREEN.value)
 
         pygame.mouse.set_cursor(*pygame.cursors.arrow)
 
@@ -75,16 +75,29 @@ class Game:
         return None
         
     def draw_winner(self, winner: Player_Card):
-        name = Label(winner.name, self.screen, winner.font_name, winner.color_name, (self.WIDTH / 2 - 64 + 70, self.HEIGHT / 2 - 20))
-        # + 100 width is for text of victory
-        length_add = name.get_width() - 100
-        if length_add < 0:
-            length_add = 0
-        length_add += 10 # 10 is for the padding right
-        pygame.draw.rect(self.screen, Color.WHITE.value, pygame.Rect(self.WIDTH / 2 - 75, self.HEIGHT/2 - 70, 80 + 100 + length_add, 75))
-        self.screen.blit(winner.image, (self.WIDTH / 2 - 64, self.HEIGHT / 2 - 64))
+        label_name_winner = Label(winner.name, self.screen, winner.font_name, winner.color_name)
+        length_add = label_name_winner.get_width() - self.victory.get_width()
+        if length_add < 0 : length_add = 0
+        winner_width_image = winner.image.get_width()
+        winner_height_image = winner.image.get_height()
+
+        middle_width = self.WIDTH / 2
+        middle_height = self.HEIGHT / 2
+        height_message_winner = winner_height_image + 12
+        width_message_winner = 20 + winner_width_image + self.victory.get_width() + length_add
+
+        pos_x = middle_width - width_message_winner / 2
+        pos_y = middle_height - height_message_winner / 2
+        rect = pygame.Rect(pos_x, pos_y, width_message_winner, height_message_winner)
+        pygame.draw.rect(self.screen, Color.WHITE.value, rect)
+        space = 12 / 2
+        self.screen.blit(winner.image, (pos_x + 10, pos_y + space))
+
+        self.victory.set_pos((pos_x + 15 + winner_width_image, pos_y + space))
+        label_name_winner.set_pos((pos_x + 15 + winner_width_image, pos_y + height_message_winner - space - label_name_winner.get_height()))
+
         self.victory.show_label()
-        name.show_label()
+        label_name_winner.show_label()
         
 
     def draw_form(self, pos_mouse: array):

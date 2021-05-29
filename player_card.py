@@ -25,12 +25,11 @@ class Player_Card:
 
         # Turn message init
         self.message_turn = LabelOpacity("Your Turn !", screen, self.font_name, Color.GREEN.value)
-        self.message_turn_width = self.message_turn.get_width()
-        self.message_turn_height = self.message_turn.get_height()
+        self.message_turn_width, self.message_turn_height = self.message_turn.get_size()
         self.pos_x_turn_message = self.pos[0] + self.pos[2] / 2 - self.message_turn_width / 2
         self.pos_y_turn_message = self.pos[1] - self.message_turn_height / 2 + self.pos[3] / 2
         self.message_turn.set_pos((self.pos_x_turn_message, self.pos_y_turn_message))
-        self.rect_blank = pygame.Rect(*self.message_turn.pos, self.message_turn.get_width(), self.message_turn.get_height())
+        self.rect_blank = pygame.Rect(*self.message_turn.pos, self.message_turn_width, self.message_turn_height)
 
     def draw_card(self):
         pygame.draw.rect(self.screen, self.color_card, self.rect_card)
