@@ -3,6 +3,7 @@ from pygame.sndarray import array
 from player_card import Player_Card
 from color import Color
 from label import Label
+from winner_card import Winner_Card
 
 class Game:
 
@@ -26,11 +27,10 @@ class Game:
         pos_card_two = (0, self.HEIGHT - self.CARD_HEIGHT, self.WIDTH, self.CARD_HEIGHT)
         self.player_one = Player_Card(name, f"{current_loc}/images/profil.png", pos_card_one, Color.RED, self.__draw_circle, screen)
         self.player_two = Player_Card("Karim", f"{current_loc}/images/profil.png", pos_card_two, Color.BLUE, self.__draw_cross, screen)
+        self.winner_card_one = Winner_Card(screen, self.player_one, width, height)
+        self.winner_card_two = Winner_Card(screen, self.player_two, width, height)
         self.player_one.my_turn = True
 
-        # Init message of winner
-        self.font_winner = pygame.font.SysFont(None, 25)
-        self.victory = Label("VICTOIRE !", self.screen, self.font_winner, Color.GREEN.value)
 
         pygame.mouse.set_cursor(*pygame.cursors.arrow)
 
@@ -75,29 +75,10 @@ class Game:
         return None
         
     def draw_winner(self, winner: Player_Card):
-        label_name_winner = Label(winner.name, self.screen, winner.font_name, winner.color_name)
-        length_add = label_name_winner.get_width() - self.victory.get_width()
-        if length_add < 0 : length_add = 0
-        winner_width_image = winner.image.get_width()
-        winner_height_image = winner.image.get_height()
-
-        middle_width = self.WIDTH / 2
-        middle_height = self.HEIGHT / 2
-        height_message_winner = winner_height_image + 12
-        width_message_winner = 20 + winner_width_image + self.victory.get_width() + length_add
-
-        pos_x = middle_width - width_message_winner / 2
-        pos_y = middle_height - height_message_winner / 2
-        rect = pygame.Rect(pos_x, pos_y, width_message_winner, height_message_winner)
-        pygame.draw.rect(self.screen, Color.WHITE.value, rect)
-        space = 12 / 2
-        self.screen.blit(winner.image, (pos_x + 10, pos_y + space))
-
-        self.victory.set_pos((pos_x + 15 + winner_width_image, pos_y + space))
-        label_name_winner.set_pos((pos_x + 15 + winner_width_image, pos_y + height_message_winner - space - label_name_winner.get_height()))
-
-        self.victory.show_label()
-        label_name_winner.show_label()
+        if winner.name == self.player_one.name:
+            self.winner_card_one.draw_winner()
+        else:
+            self.winner_card_two.draw_winner()
         
 
     def draw_form(self, pos_mouse: array):
